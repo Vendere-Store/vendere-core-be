@@ -1,5 +1,6 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { AppService } from './app.service';
+
 // import { CreateUserRequest } from './create-user-request.dto';
 
 @Controller()
@@ -11,13 +12,19 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  // @Post()
-  // createUser(@Body() createUserRequest: CreateUserRequest) {
-  //   this.appService.createUser(createUserRequest);
-  // }
+  @Post('products')
+  createProduct(@Body() createProductRequest: any) {
+    // Forwarding the incoming request to the products service via messaging
+    this.appService.createProduct(createProductRequest);
+  }
 
   @Get('products')
   getAnalytics() {
     return this.appService.getProducts();
+  }
+
+  @Get('product/:id')
+  getProduct(@Param() id: number) {
+    return this.appService.getProduct(id);
   }
 }

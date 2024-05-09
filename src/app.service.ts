@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
+import { firstValueFrom } from 'rxjs';
 // import { CreateUserRequest } from './create-user-request.dto';
 // import { CreateUserEvent } from './create-user.event';
 
@@ -16,19 +17,24 @@ export class AppService {
     return 'Hello World!';
   }
 
-  // createUser(createUserRequest: CreateUserRequest) {
-  //   this.users.push(createUserRequest);
-  //   this.communicationClient.emit(
-  //       'user_created',
-  //       new CreateUserEvent(createUserRequest.email),
-  //   );
-  //   this.analyticsClient.emit(
-  //       'user_created',
-  //       new CreateUserEvent(createUserRequest.email),
-  //   );
-  // }
+  async createProduct(createProductRequest: any) {
+    try {
+      console.log('Sending product from gateway');
+      return firstValueFrom(
+        this.productsClient.send('createProduct', createProductRequest),
+      );
+    } catch (error) {
+      console.error('Error sending product creation request:', error);
+
+      throw new Error(`Error creating product: ${error.message}`);
+    }
+  }
 
   getProducts() {
     return this.productsClient.send('findAllProducts', {});
+  }
+
+  getProduct(id: number) {
+    return this.productsClient.send('findOneProduct', id);
   }
 }
