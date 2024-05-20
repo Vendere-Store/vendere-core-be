@@ -23,7 +23,7 @@ export class AppController {
     return this.appService.getProducts();
   }
 
-  @Get('product/:id')
+  @Get('products/:id')
   getProduct(@Param() id: number) {
     return this.appService.getProduct(id);
   }

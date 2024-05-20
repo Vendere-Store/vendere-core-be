@@ -13,7 +13,7 @@ import { AppService } from './app.service';
       {
         name: 'PRODUCTS',
         transport: Transport.TCP,
-        options: { port: 3001 },
+        options: { port: 4001 },
       },
     ]),
   ],
