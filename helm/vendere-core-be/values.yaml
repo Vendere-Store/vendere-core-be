@@ -9,7 +9,7 @@ image:
 service:
   type: ClusterIP
   port: 4000
-  targetPort: 3000  # Ensure this matches the containerPort in deployment.yaml
+  targetPort: 4000  # Ensure this matches the containerPort in deployment.yaml
 
 resources:
   requests:
@@ -24,10 +24,15 @@ ingress:
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
   hosts:
-    - host: core.vendere.store
+    - host: api.vendere.store
       paths:
         - path: /
           pathType: Prefix
+          backend:
+            service:
+              name: vendere-core-be
+              port:
+                number: 4000
 
 controller:
   ingressClass: "my-nginx-ingress"

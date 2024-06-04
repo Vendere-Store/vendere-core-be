@@ -1,10 +1,7 @@
-# templates/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Values.nameOverride | default .Chart.Name }}
-  labels:
-    app: {{ .Values.nameOverride | default .Chart.Name }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -16,14 +13,11 @@ spec:
         app: {{ .Values.nameOverride | default .Chart.Name }}
     spec:
       containers:
-        - name: {{ .Chart.Name }}
+        - name: {{ .Values.nameOverride | default .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - name: http
-              containerPort: {{ .Values.service.targetPort }}
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readiness
+            - containerPort: {{ .Values.service.targetPort }}
+          resources:
+            {{- with .Values.resources }}
+              {{ toYaml . | nindent 12 }}
+              {{- end }}
