@@ -1,0 +1,33 @@
+# values.yaml
+replicaCount: 1
+
+image:
+  repository: sh0n3/vendere-core-be
+  pullPolicy: Always
+  tag: "latest"
+
+service:
+  type: ClusterIP
+  port: 4000
+  targetPort: 3000  # Ensure this matches the containerPort in deployment.yaml
+
+resources:
+  requests:
+    memory: "64Mi"
+    cpu: "250m"
+  limits:
+    memory: "128Mi"
+    cpu: "500m"
+
+ingress:
+  enabled: true
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  hosts:
+    - host: core.vendere.store
+      paths:
+        - path: /
+          pathType: Prefix
+
+controller:
+  ingressClass: "my-nginx-ingress"
